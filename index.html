@@ -3,357 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Инф. Порт. Участка 11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bauhaus+93&display=swap" rel="stylesheet">
+    <title>SCP-1531 - Геометрия Мертвецов</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body {
-            background-color: #eaeaf5;
-            margin: 0;
-            font-family: 'Roboto', sans-serif; /* Применение шрифта Roboto */
-            padding-top: 80px; /* Отступ сверху для основного контента */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-            user-select: none; /* Запрет выделения текста */
-        }
-        /* Кастомная полоса прокрутки */
-        body::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        body::-webkit-scrollbar-track {
-            background-color: #333333;
-        }
-
-        body::-webkit-scrollbar-thumb {
-            background-color: #a889e7;
-            border-radius: 10px;
-        }
-
-        body::-webkit-scrollbar-thumb:hover {
-            background-color: #d0d0f2;
-        }
-
-        .background-text {
-            width: 100%;
-            position: absolute;
-            top: 120%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
             color: #333;
-            max-width: 80%;
-            z-index: 1;
-            filter: blur(5px); /* Размытие текста */
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
-        }
-
-        .modal {
-            background: #eeedf2;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
-            width: 100%;
-            box-sizing: border-box;
-            opacity: 0.9; /* Полупрозрачность содержимого */
-            text-align: center; /* Выравнивание текста по центру */
+            background-color: #f5f5f5;
         }
-
-        .modal h2 {
-            text-align: center; /* Выравнивание заголовка по центру */
-            background: linear-gradient(90deg, #20155E, #A6BDD7, #20155E);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: colorChange 2s infinite alternate;
-        }
-
-        .modal p:first-of-type {
-            text-align: left; /* Выравнивание первого <p> по левому краю */
-        }
-
-        .modal p:last-of-type {
-            text-align: center; /* Выравнивание последнего <p> по центру */
-            position: relative;
-            padding: 0 20px; /* Добавляем отступы для черточек */
-        }
-
-        .modal p:last-of-type::before,
-        .modal p:last-of-type::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: calc(50% - 40px); /* Вычитаем отступы */
-            height: 1px;
-            background-color: black;
-            transform: translateY(-50%);
-        }
-
-        .modal p:last-of-type::before {
-            left: 0;
-        }
-
-        .modal p:last-of-type::after {
-            right: 0;
-        }
-
-        .modal p:last-of-type a {
-            color: #32127A; /* Цвет текста @Pogusik */
-            text-decoration: none; /* Убираем подчёркивание */
-            transition: color 0.3s, font-weight 0.3s, transform 0.3s; /* Плавные переходы */
-            display: inline-block; /* Для анимации transform */
-        }
-
-        .modal p:last-of-type a:hover {
-            color: #A6BDD7; /* Цвет текста при наведении */
-            font-weight: bold; /* Жирный текст при наведении */
-            transform: scale(1.1); /* Увеличение текста при наведении */
-        }
-
-        .close-btn {
-            display: none; /* Убираем кнопку закрытия */
-        }
-
-        @keyframes colorChange {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .color-1E213D {
-            color: #1E213D;
-        }
-
-        .color-20155E {
-            color: #20155E;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #eeedf2; /* Измененный цвет фона */
-            padding: 10px 20px;
-            position: fixed;
-            top: 20px; /* Отступ сверху */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%; /* Уменьшенная ширина на 10% */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 10px; /* Скругление углов */
-            z-index: 1000; /* Панель всегда на первом плане */
-        }
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-        }
-        .navbar-logo img {
-            height: 40px;
-            margin-right: 10px;
-            filter: brightness(2.2); /* Осветление логотипа */
-        }
-        .navbar-title {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-        .navbar-subtitle {
-            font-family: 'Bauhaus 93', sans-serif; /* Применение шрифта Bauhaus 93 */
-            font-size: 1em;
-            color: white; /* Белый цвет текста */
-            -webkit-text-stroke: 1px black; /* Черная обводка */
-            text-stroke: 1px black; /* Черная обводка для совместимости с другими браузерами */
-            margin-top: 2px; /* Уменьшенное расстояние */
-        }
-        .navbar-links {
-            display: flex;
-            gap: 20px;
-        }
-        .navbar-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-        .navbar-links a:hover {
-            color: #7442C8; /* Измененный цвет текста при наведении */
-        }
-
-        @font-face {
-            font-family: 'Roboto';
-            src: url(http://fonts.gstatic.com/s/roboto/v15/mErvLBYg_cXG3rLvUsKT_fesZW2xOQ-xsNqO47m55DA.woff2);
-        }
-
-        .rimg {
-            float: right;
-            border: solid 1px #666;
+        
+        .scp-header {
+            background-color: #990000;
+            color: white;
+            padding: 15px;
             text-align: center;
-            font-size: 8pt;
-            font-weight: bold;
-            background: #EEE;
-            margin: 10px auto 5px 8px;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, .25);
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 0;
         }
-
-        h3 {
-            font-family: Courier New; /* Шрифт */
-            font-size: 1.5rem; /* Размер заголовка */
+        
+        .scp-container {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .scp-content {
+            padding: 20px;
+        }
+        
+        .scp-image {
             text-align: center;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
         }
-
-        h6.shadow {
-            text-shadow: 0px 0px 5px rgba(0,0,0,0.2); /* Параметры тени */
+        
+        .scp-image img {
+            max-width: 100%;
+            height: auto;
         }
-
-        .rigthfoto {
-            float: right;
-            margin: 5px 5px 5px 5px; /* Расстояния от текста до фото */
-            border: 4px solid #2F2F2F; /* Цвет рамки фото */
-            width: 30%; /* Высота фото */
+        
+        .scp-caption {
+            font-style: italic;
+            text-align: center;
+            margin-top: 5px;
+            color: #666;
         }
-
-        .gradient {
-            border: 12px solid transparent; /* Параметры рамки */
-            background: linear-gradient(45deg, #E6E8EF, #E6E8EF) border-box; /* Градиентная рамка */
-            border-radius: 3px; /* Радиус скругления */
-            box-shadow: 0 0 11px rgba(0, 0, 0, 0.3);
-            padding: 1em; /* Расстояние от текста до рамки */
+        
+        .scp-block {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 5px solid #990000;
+            background-color: #f9f9f9;
         }
-
-        box-shadow: 0px 0px 15px 10px #000;
-
-        /* Медиа-запросы для адаптации текста */
-        @media (max-width: 1200px) {
-            .navbar-title {
-                font-size: 1em;
-            }
-            .navbar-subtitle {
-                font-size: 0.8em;
-            }
-            .navbar-links a {
-                font-size: 0.9em;
-            }
+        
+        .scp-warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
         }
-
-        @media (max-width: 992px) {
-            .navbar-title {
-                font-size: 0.9em;
-            }
-            .navbar-subtitle {
-                font-size: 0.7em;
-            }
-            .navbar-links a {
-                font-size: 0.8em;
-            }
+        
+        .scp-formula {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow-x: auto;
         }
-
-        @media (max-width: 768px) {
-            .navbar-title {
-                font-size: 0.8em;
-            }
-            .navbar-subtitle {
-                font-size: 0.6em;
-            }
-            .navbar-links a {
-                font-size: 0.7em;
-            }
+        
+        .scp-footer {
+            text-align: right;
+            font-style: italic;
+            color: #666;
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
         }
-
-        @media (max-width: 576px) {
-            .navbar-title {
-                font-size: 0.7em;
-            }
-            .navbar-subtitle {
-                font-size: 0.5em;
-            }
-            .navbar-links a {
-                font-size: 0.6em;
-            }
+        
+        .scp-tag {
+            display: inline-block;
+            background-color: #eee;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-right: 5px;
+            font-size: 0.8em;
+            color: #555;
+        }
+        
+        .scp-credits {
+            font-size: 0.9em;
+            color: #666;
+            text-align: right;
+            margin-top: 30px;
+        }
+        
+        .scp-level {
+            font-weight: bold;
+            color: #990000;
+        }
+        
+        .scp-clearance {
+            font-weight: bold;
+            color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="navbar-logo">
-            <img src="https://i.imgur.com/o1iLmTJ.png" alt="Логотип">
-            <div>
-                <span class="navbar-title">Инф. Порт. Участка 11</span>
-                <div class="navbar-subtitle">SCP Foundation</div>
+    <div class="scp-container">
+        <h1 class="scp-header">SCP-1531 - "Геометрия Мертвецов"</h1>
+        
+        <div class="scp-content">
+            <div class="scp-image">
+                <img src="https://via.placeholder.com/600x300?text=SCP-1531+Visualization" alt="Визуализация SCP-1531">
+                <div class="scp-caption">Рисунок 1. Попытка визуализации пространственных искажений SCP-1531</div>
+            </div>
+            
+            <div class="scp-block">
+                <p><strong>Класс объекта:</strong> <span class="scp-level">Кетер</span></p>
+                <p><strong>Особые условия содержания:</strong> SCP-1531 не требует физического содержания, так как представляет собой математическую аномалию. Все исследования должны проводиться в виртуальной среде уровня изоляции 4. Любые попытки физического моделирования SCP-1531 требуют одобрения Совета О5.</p>
+                <p><strong>Описание:</strong> SCP-1531 - это аномальная геометрическая система, обозначаемая как "Геометрия Мертвецов" (Necrogeometria). В данной системе пространственные характеристики определяются параметром ψ ("жизненная сила"), который убывает со временем и расстоянием.</p>
+            </div>
+            
+            <div class="scp-warning">
+                <p><strong>ВНИМАНИЕ:</strong> Попытки визуализации SCP-1531 в трехмерном пространстве приводят к тяжелым когнитивным нарушениям у 78% испытуемых. Доступ к полному описанию SCP-1531 требует уровня допуска <span class="scp-clearance">3/1531</span> и выше.</p>
+            </div>
+            
+            <h2>1. Основные свойства SCP-1531</h2>
+            
+            <p>SCP-1531 проявляет следующие аномальные свойства:</p>
+            <ul>
+                <li><strong>Трупные точки (ψ=0):</strong> Сингулярности, где пространство прекращает существование</li>
+                <li><strong>Некросвязи:</strong> Пути между трупными точками с обратным течением времени</li>
+                <li><strong>Зоны распада (ψ &lt; 1):</strong> Области с нарушением классических геометрических аксиом</li>
+            </ul>
+            
+            <div class="scp-image">
+                <img src="https://via.placeholder.com/400x200?text=SCP-1531+Decay+Zones" alt="Зоны распада SCP-1531">
+                <div class="scp-caption">Рисунок 2. Схематическое изображение зон распада SCP-1531</div>
+            </div>
+            
+            <h2>2. Математическое описание</h2>
+            
+            <div class="scp-block">
+                <h3>2.1 Принцип распада</h3>
+                <p>Изменение жизненной силы ψ(P, t) точки P описывается уравнением:</p>
+                <div class="scp-formula">
+                    \[ \frac{\partial \psi}{\partial t} = -\alpha \psi - \beta \int_{\Omega} \frac{\psi(Q) \, dQ}{|P-Q|^{\gamma}} \]
+                </div>
+                <p>где:<br>
+                α = коэффициент внутреннего распада (0.15 ± 0.03)<br>
+                β = коэффициент заражения (0.22 ± 0.05)<br>
+                γ = пространственный индекс (2.8 ± 0.2)</p>
+            </div>
+            
+            <div class="scp-block">
+                <h3>2.2 Метрика пространства SCP-1531</h3>
+                <p>Расстояние между точками P и Q:</p>
+                <div class="scp-formula">
+                    \[ d(P, Q) = \inf_{\Gamma} \int_{\Gamma} \frac{\sqrt{dx_i dx^i}}{\psi(x, t) + \epsilon} \]
+                </div>
+                <p>При ψ → 0 расстояние стремится к бесконечности, создавая пространственные разрывы.</p>
+            </div>
+            
+            <h2>3. Аномальные эффекты</h2>
+            
+            <div class="scp-block">
+                <h3>3.1 Временные аномалии</h3>
+                <p>В некросвязях время течет в обратном направлении:</p>
+                <div class="scp-formula">
+                    \[ t(\tau) = t_0 - \tau \cdot \ln(\psi_{\text{avg}}) \]
+                </div>
+                <p>Эксперимент 1531-45 показал, что объекты, помещенные в некросвязи, демонстрируют признаки "оживления" неорганических материалов.</p>
+            </div>
+            
+            <div class="scp-block">
+                <h3>3.2 Геометрические аномалии</h3>
+                <p>Сумма углов в треугольнике:</p>
+                <div class="scp-formula">
+                    \[ \angle A + \angle B + \angle C = \pi \cdot \left( 1 - \frac{\sum_{i=1}^3 \psi_i}{\psi_A + \psi_B + \psi_C} \right) \]
+                </div>
+                <p>В зонах распада наблюдаются треугольники с нулевой суммой углов.</p>
+            </div>
+            
+            <div class="scp-warning">
+                <p><strong>ВАЖНО:</strong> Контакт с зонами распада SCP-1531 приводит к необратимым изменениям в структуре материи. Всего зарегистрировано ██ случаев "геометрической смерти" среди исследователей.</p>
+            </div>
+            
+            <h2>4. История обнаружения</h2>
+            <p>SCP-1531 была обнаружена в ██/██/19██ при анализе рукописей математика-самоучки █████ █████, который исчез при попытке построить физическую модель своей теории. В его квартире были найдены чертежи, демонстрирующие пространственные аномалии, позже идентифицированные как трупные точки.</p>
+            
+            <div class="scp-image">
+                <img src="https://via.placeholder.com/400x300?text=Original+SCP-1531+Notes" alt="Оригинальные записи SCP-1531">
+                <div class="scp-caption">Рисунок 3. Одна из сохранившихся страниц оригинальных записей</div>
+            </div>
+            
+            <h2>5. Применение и исследования</h2>
+            <p>Исследования SCP-1531 проводятся под кодовым названием "Проект Некросфера". Основные направления:</p>
+            <ul>
+                <li>Разработка защитных мер против пространственного распада</li>
+                <li>Изучение возможности использования некросвязей для временных манипуляций</li>
+                <li>Создание математического аппарата для прогнозирования появления трупных точек</li>
+            </ul>
+            
+            <div class="scp-block">
+                <p><strong>Текущий статус:</strong> Активные исследования. Запрошен переход к классу "Таумиэль" для возможного использования против других SCP-объектов пространственного типа.</p>
+            </div>
+            
+            <div class="scp-footer">
+                <p><em>"Пространство не просто искривляется - оно умирает. И мы только что обнаружили его труп."</em><br>
+                - Д-р ██████, ведущий исследователь SCP-1531</p>
+            </div>
+            
+            <div class="scp-credits">
+                <p>Документ подготовлен: Д-р ██████<br>
+                Одобрено: Советом О5-█<br>
+                Последнее обновление: ██/██/20██</p>
+                <p><span class="scp-tag">геометрическая аномалия</span> <span class="scp-tag">пространственный распад</span> <span class="scp-tag">временные аномалии</span> <span class="scp-tag">математическая SCP</span></p>
             </div>
         </div>
-        <div class="navbar-links">
-            <a href="https://sites.google.com/view/haoticsite11/start">О участке</a>
-            <a href="https://sites.google.com/view/haoticsite11/SCP">SCP</a>
-            <a href="https://sites.google.com/view/haoticsite11/apers">О персонале</a>
-            <a href="https://sites.google.com/view/haoticsite11/pandw">Проекты и разработки</a>
-        </div>
     </div>
-    <div class="background-text">
-        <div class="gradient">
-            <font size="4" color="#333" face="Courier New" align="center"><b><h1>Расшифровка "Инструктаж для сотрудников ИТС участка 15Z32" <hr></h1></b></font>
-            <font size="5" color="#333" face="Courier New" align="left"><b>Время<font size="6">:<font size="5"></b> 12:34</font><hr>
-            <font size="5" color="#333" face="Courier New" align="left"><b>Место встречи<font size="6">:<font size="5"></b> Подготовительная Аудитория №17</font><hr>
-            <font size="5" color="#333" face="Courier New" align="left">
-            <p>*Кашляет, пытаясь привлечь внимание, оглядывая собравшихся.*<br> Ладно, нас тут не так уж и много, как обычно. Слышал, что перевели кого-то на наш проект, но видимо, доехали не все. Ну, ничего, работать будем с тем, что есть. Забудьте о том, что вы знали об обычных аномалиях и их содержании. Здесь все по-другому, здесь мы играем по своим правилам. Это вам не камеры содержания с SCP-173, или с SCP-682, здесь совсем другая история…<br><br>
-
-Итак, господа, вы – часть команды, работающей на проекте «Павший Ангел». И, да, вы правильно поняли, он такой же дерьмовый, как и звучит. Мы не будем прикрываться красивыми словами и красивыми отчетами. Это не место для героев, это место для тех, кто готов работать с тем, что другие считают безумием. И раз вы здесь, видимо, вы на это способны. Меня зовут, скажем так, “Смотритель”. Обращаться можете любым удобным способом, но не затягивайте разговоры. У нас здесь работа, а не салон светских бесед.<br><br>
-
-Давайте сразу к делу. Проект «Павший Ангел» - это попытка использовать **скульптора реальности** в качестве источника энергии и стабилизации. Да, того самого, который может менять реальность как захочет, и все это должно работать на благо Фонда. Мы пытаемся использовать их, чтобы они сами содержали себя и, при этом, работали на нас. Это похоже на цирк, я знаю. Но мы делаем это.<br><br>
-
-В центре всего этого безумия находится так называемое **Устройство Клейфа Вингормида**. Я вам не буду пересказывать его чертежи, но скажу в двух словах, это клетка. Она перемалывает силу скульптора реальности и перенаправляет её по заданным контурам. Это как электростанция, работающая на магии, и все это держится на честном слове и скотче, как обычно.<br><br>
-На данный момент, у нас есть <strong>тестовый участок 15Z32</strong>, где все это дело и происходит. Там, в недрах этого участка, мы держим <strong>SCP-<span class="dynamic-text" id="dynamic-text">###</span></strong>, помещённого в вышеупомянутое устройство и запечатанного методом <strong>Клетки Фарадея</strong>. Это, если по простому, клетка в клетке, чтобы он не устроил нам тут Армагеддон. Устройство Клейфа Вингормида поглощает и использует силы скульптора реальности в радиусе всей зоны, как свой собственный источник энергии. Система безопасности, к счастью, подключена к устройству и может самостоятельно управлять его силами. Это значит, что, если что-то пойдёт не так, мы, теоретически, можем взять ситуацию под контроль. Но, как вы знаете, “теоретически” и “на практике” — это разные вещи. За радиусом действия Устройства Клейфа установлены несколько якорей реальности. Так, на всякий случай, если вдруг начнет колбасить. А колбасить тут будет, я вас уверяю.<br><br>
-Над проектом бились, скажу честно, светлые умы. С участка 11 прислали группу, которые все это и придумали, те самые люди, которые привели нас в это безумие. Клейф Вингрмид, Джозав Востин, Эльза Варина, Редорос Максимус, Радриго Кастел, Фимиль Маскиров, Стасья Ведомировна, Агент “Утренняя Звезда” — все, как один, получили рекомендации и были переведены на другие объекты. Намек понял? Если не хочешь, чтобы твоя карьера полетела по наклонной - будь осторожен, не то начнешь свои дни в качестве дворника в другом секторе.<br><br>
-
-Теперь ваша задача – следить за тем, чтобы этот цирк продолжал работать. Это значит постоянный мониторинг Устройства Клейфа, проверка якорей реальности, контроль за стабильностью зоны, и ещё много чего, о чем вы узнаете по ходу пьесы. Не надейтесь на то, что все будет гладко, здесь все валится из рук, все, кроме нашей ответственности. И ещё, что бы не происходило - не паникуйте. Если мы начнем паниковать, то мы все дружно отправимся на скотобойню.<br><br>
-
-И помните – вы работаете не просто на Фонд, вы работаете на то, чтобы держать этот мир на краю пропасти. Понятно?<br> Отлично. Теперь за работу. Задавайте вопросы, пока не дойдёте до того момента, когда станет слишком поздно.</p>
-        </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></font></font></font></font></font>
-    </div>
-    <div class="overlay" id="overlay">
-        <div class="modal">
-            <h2>Отказано в доступе</h2>
-            <p>Вашего <span class="color-1E213D"><b>уровня доступа</b></span> недостаточно для прочтения данной документации. Пожалуйста, свяжитесь с администрацией сайта, если вы считаете, что это <span class="color-20155E">ошибка</span>.</p>
-            <p><a target="_blank">@Pogusik</a></p>
-        </div>
-    </div>
-<script>      <script>        const dynamicText = document.getElementById('dynamic-text');
-        const characters = '0123456789';
-
-        function getRandomCharacter() {
-            return characters[Math.floor(Math.random() * characters.length)];
-        }
-
-        function updateText() {
-            dynamicText.textContent = getRandomCharacter() + getRandomCharacter() + getRandomCharacter();
-        }
-
-        setInterval(updateText, 10);
-        
-                // Запрет копирования текста
-        document.addEventListener('copy', function (e) {
-            e.preventDefault();
-        });
-
-        // Запрет выделения текста
-        document.addEventListener('selectstart', function (e) {
-            e.preventDefault();
-        });
-    </script></script>
 </body>
 </html>
