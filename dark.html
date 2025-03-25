@@ -10,7 +10,7 @@
         :root {
             --bg-color: #f5f5f5;
             --text-color: #333;
-            --accent-color: #3d93a9;
+            --accent-color: #b82e2e;
             --danger-color: #b82e2e;
             --warning-color: #a98a3d;
             --panel-bg: #ffffff;
@@ -42,7 +42,6 @@
             transition: all 0.3s ease;
         }
         
-        /* Панель управления */
         .scp-navbar {
             background-color: var(--panel-bg);
             padding: 10px 20px;
@@ -107,7 +106,6 @@
             padding: 5px;
         }
         
-        /* Основное содержимое */
         .scp-header {
             background-color: var(--danger-color);
             color: white;
@@ -243,7 +241,6 @@
             text-decoration: underline;
         }
         
-        /* Анимации */
         @keyframes pulse {
             0% { opacity: 0.6; }
             50% { opacity: 1; }
@@ -258,7 +255,6 @@
     </style>
 </head>
 <body class="light-theme">
-    <!-- Панель управления -->
     <div class="scp-navbar">
         <div class="scp-logo">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/SCP_Foundation_%28emblem%29.svg/512px-SCP_Foundation_%28emblem%29.svg.png" alt="SCP Logo" class="scp-logo-img">
@@ -273,7 +269,6 @@
         </div>
     </div>
     
-    <!-- Основное содержимое -->
     <div class="scp-container">
         <h1 class="scp-header">SCP-1531 - "Геометрия Мертвецов"</h1>
         
@@ -395,11 +390,9 @@
     </div>
 
     <script>
-        // Переключение темы
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         
-        // Проверяем сохранённую тему в localStorage
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             body.classList.add(savedTheme);
@@ -410,7 +403,6 @@
             body.classList.toggle('dark-theme');
             body.classList.toggle('light-theme');
             
-            // Сохраняем выбор темы
             const currentTheme = body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
             localStorage.setItem('theme', currentTheme);
             
@@ -418,11 +410,9 @@
         });
         
         function updateToggleText() {
-            if (body.classList.contains('dark-theme')) {
-                themeToggle.textContent = '☀️ Светлая тема';
-            } else {
-                themeToggle.textContent = '🌙 Тёмная тема';
-            }
+            themeToggle.textContent = body.classList.contains('dark-theme') 
+                ? '☀️ Светлая тема' 
+                : '🌙 Тёмная тема';
         }
     </script>
 </body>
