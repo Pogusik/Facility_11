@@ -8,6 +8,18 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --accent-color: #3d93a9;
+            --danger-color: #b82e2e;
+            --warning-color: #a98a3d;
+            --panel-bg: #ffffff;
+            --border-color: #ddd;
+            --block-bg: #ffffff;
+            --image-bg: #f9f9f9;
+        }
+
+        .dark-theme {
             --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
             --accent-color: #3d93a9;
@@ -16,16 +28,18 @@
             --panel-bg: #0d0d0d;
             --border-color: #333;
             --block-bg: #262626;
+            --image-bg: #333;
         }
         
         body {
-            font-family: 'Courier New', monospace;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0;
+            transition: all 0.3s ease;
         }
         
         /* Панель управления */
@@ -36,7 +50,10 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid var(--accent-color);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .scp-logo {
@@ -47,12 +64,16 @@
         
         .scp-logo-img {
             height: 40px;
-            filter: brightness(0) invert(1);
+            filter: brightness(0) invert(var(--logo-filter, 0));
+        }
+        
+        .dark-theme .scp-logo-img {
+            --logo-filter: 1;
         }
         
         .scp-title {
             font-weight: bold;
-            color: white;
+            color: var(--text-color);
             font-size: 1.2em;
             text-transform: uppercase;
         }
@@ -60,6 +81,7 @@
         .scp-nav-links {
             display: flex;
             gap: 20px;
+            align-items: center;
         }
         
         .scp-nav-link {
@@ -68,12 +90,21 @@
             font-size: 0.9em;
             padding: 5px 10px;
             border-radius: 3px;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         
         .scp-nav-link:hover {
             background-color: var(--accent-color);
             color: white;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1em;
+            padding: 5px;
         }
         
         /* Основное содержимое */
@@ -90,7 +121,7 @@
             background-color: var(--block-bg);
             border: 1px solid var(--border-color);
             border-radius: 0 0 5px 5px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
         
@@ -103,19 +134,21 @@
             margin: 25px 0;
             border: 1px solid var(--border-color);
             padding: 15px;
-            background-color: #333;
+            background-color: var(--image-bg);
         }
         
         .scp-image img {
             max-width: 100%;
             height: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .scp-caption {
             font-style: italic;
             text-align: center;
             margin-top: 10px;
-            color: #aaa;
+            color: var(--text-color);
+            opacity: 0.8;
             font-size: 0.9em;
         }
         
@@ -123,18 +156,23 @@
             margin: 25px 0;
             padding: 20px;
             border-left: 5px solid var(--accent-color);
-            background-color: #2d2d2d;
+            background-color: var(--block-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
         .scp-warning {
-            background-color: #3d2e1f;
+            background-color: var(--warning-bg, #fff3cd);
             border-left: 5px solid var(--warning-color);
             padding: 20px;
             margin: 25px 0;
         }
         
+        .dark-theme .scp-warning {
+            --warning-bg: #3d2e1f;
+        }
+        
         .scp-formula {
-            background-color: #333;
+            background-color: var(--formula-bg, #f8f9fa);
             padding: 20px;
             border: 1px solid var(--border-color);
             border-radius: 5px;
@@ -142,10 +180,15 @@
             overflow-x: auto;
         }
         
+        .dark-theme .scp-formula {
+            --formula-bg: #333;
+        }
+        
         .scp-footer {
             text-align: right;
             font-style: italic;
-            color: #999;
+            color: var(--text-color);
+            opacity: 0.8;
             margin-top: 30px;
             border-top: 1px solid var(--border-color);
             padding-top: 15px;
@@ -153,17 +196,23 @@
         
         .scp-tag {
             display: inline-block;
-            background-color: #333;
+            background-color: var(--tag-bg, #eee);
             padding: 4px 10px;
             border-radius: 3px;
             margin-right: 8px;
             font-size: 0.8em;
-            color: #ccc;
+            color: var(--tag-color, #555);
+        }
+        
+        .dark-theme .scp-tag {
+            --tag-bg: #333;
+            --tag-color: #ccc;
         }
         
         .scp-credits {
             font-size: 0.9em;
-            color: #888;
+            color: var(--text-color);
+            opacity: 0.7;
             text-align: right;
             margin-top: 40px;
         }
@@ -204,10 +253,11 @@
         .scp-secure {
             animation: pulse 2s infinite;
             color: var(--danger-color);
+            font-weight: bold;
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
     <!-- Панель управления -->
     <div class="scp-navbar">
         <div class="scp-logo">
@@ -219,6 +269,7 @@
             <a href="#" class="scp-nav-link">База данных</a>
             <a href="#" class="scp-nav-link">Исследования</a>
             <a href="#" class="scp-nav-link">Персонал</a>
+            <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
         </div>
     </div>
     
@@ -228,7 +279,7 @@
         
         <div class="scp-content">
             <div class="scp-image">
-                <img src="https://via.placeholder.com/600x300/333/3d93a9?text=SCP-1531+Visualization" alt="Визуализация SCP-1531">
+                <img src="https://via.placeholder.com/600x300/ffffff/b82e2e?text=SCP-1531+Visualization" alt="Визуализация SCP-1531">
                 <div class="scp-caption">Рисунок 1. Попытка визуализации пространственных искажений SCP-1531 (Уровень доступа 3/1531 и выше)</div>
             </div>
             
@@ -252,7 +303,7 @@
             </ul>
             
             <div class="scp-image">
-                <img src="https://via.placeholder.com/400x200/333/3d93a9?text=SCP-1531+Decay+Zones" alt="Зоны распада SCP-1531">
+                <img src="https://via.placeholder.com/400x200/ffffff/b82e2e?text=SCP-1531+Decay+Zones" alt="Зоны распада SCP-1531">
                 <div class="scp-caption">Рисунок 2. Схематическое изображение зон распада SCP-1531 (Данные приблизительные)</div>
             </div>
             
@@ -307,7 +358,7 @@
             <p>SCP-1531 была обнаружена в ██/██/19██ при анализе рукописей математика-самоучки █████ █████, который исчез при попытке построить физическую модель своей теории. В его квартире были найдены чертежи, демонстрирующие пространственные аномалии, позже идентифицированные как трупные точки.</p>
             
             <div class="scp-image">
-                <img src="https://via.placeholder.com/400x300/333/3d93a9?text=Original+SCP-1531+Notes" alt="Оригинальные записи SCP-1531">
+                <img src="https://via.placeholder.com/400x300/ffffff/b82e2e?text=Original+SCP-1531+Notes" alt="Оригинальные записи SCP-1531">
                 <div class="scp-caption">Рисунок 3. Одна из сохранившихся страниц оригинальных записей (Перевод с немецкого)</div>
             </div>
             
@@ -342,5 +393,37 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Проверяем сохранённую тему в localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.classList.add(savedTheme);
+            updateToggleText();
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            body.classList.toggle('light-theme');
+            
+            // Сохраняем выбор темы
+            const currentTheme = body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
+            localStorage.setItem('theme', currentTheme);
+            
+            updateToggleText();
+        });
+        
+        function updateToggleText() {
+            if (body.classList.contains('dark-theme')) {
+                themeToggle.textContent = '☀️ Светлая тема';
+            } else {
+                themeToggle.textContent = '🌙 Тёмная тема';
+            }
+        }
+    </script>
 </body>
 </html>
