@@ -121,8 +121,6 @@
             border-radius: 0 0 5px 5px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
-            margin-left: 3%;
-            margin-right: 3%;
         }
         
         .scp-content {
@@ -227,12 +225,25 @@
             color: var(--accent-color);
         }
         
-        h2 {
-            color: var(--accent-color);
-            margin-top: 40px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
+h2 {
+  margin-left: 3%;
+  margin-right: 3%;
+  color: var(--accent-color);
+  margin-top: 40px;
+  padding-bottom: 8px; /* Оставляем отступ для линии */
+  position: relative; /* Для позиционирования псевдоэлемента */
+  display: inline-block; /* Чтобы линия не растягивалась на всю ширину контейнера */
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  left: -3%; /* Расширяем линию влево */
+  right: -107%; /* Расширяем линию вправо */
+  bottom: 0;
+  height: 2px;
+  background: var(--border-color);
+}
         
         a {
             color: var(--accent-color);
@@ -260,6 +271,51 @@
             border: 1px solid var(--border-color);
             background-color: var(--image-bg);
         }
+        .scp-navbar {
+    border-radius: 8px 8px 0 0;
+    /* остальные стили без изменений */
+}
+
+.scp-container {
+    border-radius: 0 0 8px 8px;
+}
+
+.scp-header {
+    border-radius: 8px 8px 0 0;
+}
+
+.scp-block, .scp-warning, .scp-formula {
+    border-radius: 8px;
+}
+
+.scp-image {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.scp-nav-link {
+    border-radius: 5px;
+}
+
+.theme-toggle {
+    border-radius: 5px;
+}
+
+.scp-tag {
+    border-radius: 5px;
+}
+
+.scp-footer {
+    border-radius: 0 0 8px 8px;
+}
+
+.scp-logo-img {
+    border-radius: 4px;
+}
+
+.scp-content {
+    border-radius: 8px;
+}
     </style>
 </head>
 <body class="light-theme">
@@ -330,7 +386,10 @@
             
             <h2>1. Основные свойства SCP-1531</h2>
             
-            <p>SCP-1531 проявляет следующие аномальные свойства:</p>
+            <p style="
+    margin-left: 3%;
+    margin-right: 3%;
+">SCP-1531 проявляет следующие аномальные свойства:</p>
             <ul>
                 <li><strong>Трупные точки (ψ=0):</strong> Сингулярности, где пространство прекращает существование</li>
                 <li><strong>Некросвязи:</strong> Пути между трупными точками с обратным течением времени</li>
@@ -402,7 +461,10 @@
             </div>
             
             <h2>4. История обнаружения</h2>
-            <p>SCP-1531 была обнаружена в ██/██/19██ при анализе рукописей математика-самоучки █████ █████, который исчез при попытке построить физическую модель своей теории. В его квартире были найдены чертежи, демонстрирующие пространственные аномалии, позже идентифицированные как трупные точки.</p>
+            <p style="
+    margin-left: 3%;
+    margin-right: 3%;
+">SCP-1531 была обнаружена в ██/██/19██ при анализе рукописей математика-самоучки █████ █████, который исчез при попытке построить физическую модель своей теории. В его квартире были найдены чертежи, демонстрирующие пространственные аномалии, позже идентифицированные как трупные точки.</p>
             
             <div class="scp-image">
                 <img src="https://via.placeholder.com/400x300/ffffff/b82e2e?text=Original+SCP-1531+Notes" alt="Оригинальные записи SCP-1531">
@@ -410,7 +472,10 @@
             </div>
             
             <h2>5. Применение и исследования</h2>
-            <p>Исследования SCP-1531 проводятся под кодовым названием "Проект Некросфера". Основные направления:</p>
+            <p style="
+    margin-left: 3%;
+    margin-right: 3%;
+">Исследования SCP-1531 проводятся под кодовым названием "Проект Некросфера". Основные направления:</p>
             <ul>
                 <li>Разработка защитных мер против пространственного распада</li>
                 <li>Изучение возможности использования некросвязей для временных манипуляций</li>
@@ -422,12 +487,17 @@
             </div>
             
             <div class="scp-footer">
-                <p><em>"Пространство не просто искривляется - оно умирает. И мы только что обнаружили его труп."</em><br>
+                <p style="
+    margin-left: 3%;
+    margin-right: 3%;"><em>"Пространство не просто искривляется - оно умирает. И мы только что обнаружили его труп."</em><br>
                 - Д-р ██████, ведущий исследователь SCP-1531</p>
             </div>
             
             <div class="scp-credits">
-                <p>Документ подготовлен: Д-р ██████<br>
+                <p style="
+    margin-left: 3%;
+    margin-right: 3%;
+">Документ подготовлен: Д-р ██████<br>
                 Одобрено: Советом О5-█<br>
                 Последнее обновление: ██/██/20██</p>
                 <p>
