@@ -252,6 +252,12 @@
             color: var(--danger-color);
             font-weight: bold;
         }
+        .scp-image svg {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--image-bg);
+        }
     </style>
 </head>
 <body class="light-theme">
@@ -272,9 +278,41 @@
     <div class="scp-container">
         <h1 class="scp-header">SCP-1531 - "Геометрия Мертвецов"</h1>
         
-        <div class="scp-content">
             <div class="scp-image">
-                <img src="https://via.placeholder.com/600x300/ffffff/b82e2e?text=SCP-1531+Visualization" alt="Визуализация SCP-1531">
+                <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#b82e2e;stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:#3d93a9;stop-opacity:0.6"/>
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="4" result="glow"/>
+                            <feMerge>
+                                <feMergeNode in="glow"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <rect width="100%" height="100%" fill="#1a1a1a"/>
+                    <path d="M0 200 Q150 100 300 200 T600 200" 
+                          stroke="url(#grad1)" 
+                          stroke-width="3" 
+                          fill="none"
+                          filter="url(#glow)"/>
+                    <polygon points="300,150 350,250 250,250 300,150 350,150 250,150" 
+                             fill="none" 
+                             stroke="#b82e2e"
+                             stroke-width="2">
+                        <animate attributeName="points" 
+                                 values="300,150 350,250 250,250 300,150 350,150 250,150;
+                                         310,160 360,240 240,260 290,140 340,160 260,140" 
+                                 dur="3s" 
+                                 repeatCount="indefinite"/>
+                    </polygon>
+                    <path d="M300 200 L320 180 M300 200 L280 220" 
+                          stroke="#fff" 
+                          stroke-width="1"/>
+                </svg>
                 <div class="scp-caption">Рисунок 1. Попытка визуализации пространственных искажений SCP-1531 (Уровень доступа 3/1531 и выше)</div>
             </div>
             
@@ -297,8 +335,23 @@
                 <li><strong>Зоны распада (ψ &lt; 1):</strong> Области с нарушением классических геометрических аксиом</li>
             </ul>
             
-            <div class="scp-image">
-                <img src="https://via.placeholder.com/400x200/ffffff/b82e2e?text=SCP-1531+Decay+Zones" alt="Зоны распада SCP-1531">
+                       <div class="scp-image">
+                <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="200" cy="200" r="180" fill="none" stroke="#3d93a9" stroke-width="2"/>
+                    <circle cx="200" cy="200" r="120" fill="none" stroke="#b82e2e" stroke-dasharray="5 5"/>
+                    <path d="M200 200 L220 180 M200 200 L180 220" stroke="#b82e2e" stroke-width="2"/>
+                    <text x="50" y="50" font-size="12" fill="#3d93a9" font-family="monospace">∂ψ/∂t = -αψ</text>
+                    <polygon points="200,100 250,150 150,150" 
+                             fill="none" 
+                             stroke="#fff" 
+                             stroke-width="1">
+                        <animate attributeName="points" 
+                                 values="200,100 250,150 150,150;
+                                         200,110 240,140 160,140" 
+                                 dur="2s" 
+                                 repeatCount="indefinite"/>
+                    </polygon>
+                </svg>
                 <div class="scp-caption">Рисунок 2. Схематическое изображение зон распада SCP-1531 (Данные приблизительные)</div>
             </div>
             
