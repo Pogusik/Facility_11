@@ -8,6 +8,7 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
+            --overflow-y: hidden;
             --bg-color: #f5f5f5;
             --text-color: #333;
             --accent-color: #b82e2e;
@@ -30,7 +31,7 @@
             --block-bg: #262626;
             --image-bg: #333;
         }
-        
+
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -41,7 +42,7 @@
             padding: 0;
             transition: all 0.3s ease;
         }
-        
+
         .scp-navbar {
             background-color: var(--panel-bg);
             padding: 10px 20px;
@@ -52,37 +53,37 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
-        
+
         .scp-logo {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .scp-logo-img {
             height: 40px;
             filter: brightness(0) invert(var(--logo-filter, 0));
         }
-        
+
         .dark-theme .scp-logo-img {
             --logo-filter: 1;
         }
-        
+
         .scp-title {
             font-weight: bold;
             color: var(--text-color);
             font-size: 1.2em;
             text-transform: uppercase;
         }
-        
+
         .scp-nav-links {
             display: flex;
             gap: 20px;
             align-items: center;
         }
-        
+
         .scp-nav-link {
             color: var(--text-color);
             text-decoration: none;
@@ -91,12 +92,12 @@
             border-radius: 3px;
             transition: all 0.3s;
         }
-        
+
         .scp-nav-link:hover {
             background-color: var(--accent-color);
             color: white;
         }
-        
+
         .theme-toggle {
             background: none;
             border: none;
@@ -105,7 +106,7 @@
             font-size: 1em;
             padding: 5px;
         }
-        
+
         .scp-header {
             background-color: var(--danger-color);
             color: white;
@@ -114,7 +115,7 @@
             margin: 20px 0 0;
             border-radius: 5px 5px 0 0;
         }
-        
+
         .scp-container {
             background-color: var(--block-bg);
             border: 1px solid var(--border-color);
@@ -122,11 +123,11 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        
+
         .scp-content {
             padding: 25px;
         }
-        
+
         .scp-image {
             text-align: center;
             margin: 25px 0;
@@ -134,13 +135,20 @@
             padding: 15px;
             background-color: var(--image-bg);
         }
-        
+
+        .scp-image svg {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--image-bg);
+        }
+
         .scp-image img {
             max-width: 100%;
             height: auto;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        
+
         .scp-caption {
             font-style: italic;
             text-align: center;
@@ -149,7 +157,7 @@
             opacity: 0.8;
             font-size: 0.9em;
         }
-        
+
         .scp-block {
             margin: 25px 0;
             padding: 20px;
@@ -157,18 +165,18 @@
             background-color: var(--block-bg);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        
+
         .scp-warning {
             background-color: var(--warning-bg, #fff3cd);
             border-left: 5px solid var(--warning-color);
             padding: 20px;
             margin: 25px 0;
         }
-        
+
         .dark-theme .scp-warning {
             --warning-bg: #3d2e1f;
         }
-        
+
         .scp-formula {
             background-color: var(--formula-bg, #f8f9fa);
             padding: 20px;
@@ -177,11 +185,11 @@
             margin: 25px 0;
             overflow-x: auto;
         }
-        
+
         .dark-theme .scp-formula {
             --formula-bg: #333;
         }
-        
+
         .scp-footer {
             text-align: right;
             font-style: italic;
@@ -191,7 +199,7 @@
             border-top: 1px solid var(--border-color);
             padding-top: 15px;
         }
-        
+
         .scp-tag {
             display: inline-block;
             background-color: var(--tag-bg, #eee);
@@ -201,121 +209,126 @@
             font-size: 0.8em;
             color: var(--tag-color, #555);
         }
-        
+
         .dark-theme .scp-tag {
             --tag-bg: #333;
             --tag-color: #ccc;
         }
-        
-        .scp-credits {
-            font-size: 0.9em;
-            color: var(--text-color);
-            opacity: 0.7;
-            text-align: right;
-            margin-top: 40px;
-        }
-        
+
         .scp-level {
             font-weight: bold;
             color: var(--danger-color);
         }
-        
+
         .scp-clearance {
             font-weight: bold;
             color: var(--accent-color);
         }
-        
-h2 {
-  margin-left: 3%;
-  margin-right: 3%;
-  color: var(--accent-color);
-  margin-top: 40px;
-  padding-bottom: 8px; /* Оставляем отступ для линии */
-  position: relative; /* Для позиционирования псевдоэлемента */
-  display: inline-block; /* Чтобы линия не растягивалась на всю ширину контейнера */
-}
 
-h2::after {
-  content: '';
-  position: absolute;
-  left: -3%; /* Расширяем линию влево */
-  right: -107%; /* Расширяем линию вправо */
-  bottom: 0;
-  height: 2px;
-  background: var(--border-color);
-}
-        
+        h2 {
+            color: var(--accent-color);
+            margin-top: 40px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
         a {
             color: var(--accent-color);
             text-decoration: none;
         }
-        
+
         a:hover {
             text-decoration: underline;
         }
-        
+
         @keyframes pulse {
             0% { opacity: 0.6; }
             50% { opacity: 1; }
             100% { opacity: 0.6; }
         }
-        
+
         .scp-secure {
             animation: pulse 2s infinite;
             color: var(--danger-color);
             font-weight: bold;
         }
-        .scp-image svg {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid var(--border-color);
-            background-color: var(--image-bg);
+
+        .censored-name {
+            cursor: pointer;
+            text-decoration: underline dotted #b82e2e;
+            animation: nameBlink 2s infinite;
+            position: relative;
         }
-        .scp-navbar {
-    border-radius: 8px 8px 0 0;
-    /* остальные стили без изменений */
-}
 
-.scp-container {
-    border-radius: 0 0 8px 8px;
-}
+        .censored-name::after {
+            content: "⚠️";
+            position: absolute;
+            right: -20px;
+            top: -5px;
+            font-size: 0.8em;
+        }
 
-.scp-header {
-    border-radius: 8px 8px 0 0;
-}
+        @keyframes nameBlink {
+            0%, 100% { opacity: 0.7; text-shadow: 0 0 5px #b82e2e; }
+            50% { opacity: 0.3; text-shadow: 0 0 10px #b82e2e; }
+        }
 
-.scp-block, .scp-warning, .scp-formula {
-    border-radius: 8px;
-}
+        .mad-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
 
-.scp-image {
-    border-radius: 8px;
-    overflow: hidden;
-}
+        .mad-content {
+            max-width: 600px;
+            padding: 20px;
+            animation: madAppear 0.5s ease-out;
+        }
 
-.scp-nav-link {
-    border-radius: 5px;
-}
+        .mad-paper {
+            background: #fffff0;
+            padding: 30px;
+            position: relative;
+            border: 2px solid #8b0000;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
 
-.theme-toggle {
-    border-radius: 5px;
-}
+        .mad-paper::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(139,0,0,0.1) 10px,
+                rgba(139,0,0,0.1) 20px
+            );
+            z-index: -1;
+        }
 
-.scp-tag {
-    border-radius: 5px;
-}
-
-.scp-footer {
-    border-radius: 0 0 8px 8px;
-}
-
-.scp-logo-img {
-    border-radius: 4px;
-}
-
-.scp-content {
-    border-radius: 8px;
-}
+        @keyframes madAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotate(-5deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
     </style>
 </head>
 <body class="light-theme">
@@ -336,6 +349,7 @@ h2::after {
     <div class="scp-container">
         <h1 class="scp-header">SCP-1531 - "Геометрия Мертвецов"</h1>
         
+        <div class="scp-content">
             <div class="scp-image">
                 <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -356,70 +370,151 @@ h2::after {
                           stroke="url(#grad1)" 
                           stroke-width="3" 
                           fill="none"
-                          filter="url(#glow)"/>
-                    <polygon points="300,150 350,250 250,250 300,150 350,150 250,150" 
+                          filter="url(#glow)">
+                        <animate attributeName="d" 
+                                 dur="15s" 
+                                 repeatCount="indefinite"
+                                 values="M0 200 Q150 100 300 200 T600 200;
+                                         M0 200 Q150 300 300 200 T600 200;
+                                         M0 200 Q150 100 300 200 T600 200"
+                                 keyTimes="0;0.5;1"
+                                 calcMode="spline"
+                                 keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+                    </path>
+                    <polygon points="300,150 350,250 250,250" 
                              fill="none" 
                              stroke="#b82e2e"
                              stroke-width="2">
-                        <animate attributeName="points" 
-                                 values="300,150 350,250 250,250 300,150 350,150 250,150;
-                                         310,160 360,240 240,260 290,140 340,160 260,140" 
-                                 dur="3s" 
-                                 repeatCount="indefinite"/>
+                        <animateTransform attributeName="transform"
+                                          type="rotate"
+                                          from="0 300 200"
+                                          to="360 300 200"
+                                          dur="20s"
+                                          repeatCount="indefinite"/>
                     </polygon>
-                    <path d="M300 200 L320 180 M300 200 L280 220" 
-                          stroke="#fff" 
-                          stroke-width="1"/>
                 </svg>
-                <div class="scp-caption">Рисунок 1. Попытка визуализации пространственных искажений SCP-1531 (Уровень доступа 3/1531 и выше)</div>
+                <div class="scp-caption">Рисунок 1. Динамика пространственных искажений SCP-1531</div>
             </div>
-            
+
             <div class="scp-block">
                 <p><strong>Класс объекта:</strong> <span class="scp-level">Кетер</span></p>
                 <p><strong>Особые условия содержания:</strong> SCP-1531 не требует физического содержания, так как представляет собой математическую аномалию. Все исследования должны проводиться в виртуальной среде уровня изоляции 4. <span class="scp-secure">ДОСТУП ОГРАНИЧЕН</span></p>
                 <p><strong>Описание:</strong> SCP-1531 - это аномальная геометрическая система, обозначаемая как "Геометрия Мертвецов" (Necrogeometria). В данной системе пространственные характеристики определяются параметром ψ ("жизненная сила"), который убывает со временем и расстоянием.</p>
             </div>
+
+            <h2>1. Основные свойства SCP-1531</h2>
+            <p>SCP-1531 проявляет следующие аномальные свойства:</p>
             
-            <div class="scp-warning">
-                <p><strong>ВНИМАНИЕ:</strong> Попытки визуализации SCP-1531 в трехмерном пространстве приводят к тяжелым когнитивным нарушениям у 78% испытуемых. Доступ к полному описанию SCP-1531 требует уровня допуска <span class="scp-clearance">3/1531</span> и выше.</p>
+            <div class="scp-block">
+                <h3>1.1 Трупные точки (ψ=0)</h3>
+                <p>Сингулярности, где пространство прекращает существование. В этих точках:</p>
+                <div class="scp-formula">
+                    \[ \lim_{\psi \to 0} d(P, Q) = \infty \quad \forall Q \neq P \]
+                </div>
+                <p>Объекты, попадающие в трупные точки, исчезают без возможности восстановления.</p>
             </div>
             
-            <h2>1. Основные свойства SCP-1531</h2>
+            <div class="scp-block">
+                <h3>1.2 Некросвязи</h3>
+                <p>Пути между трупными точками с обратным течением времени. Характеризуются:</p>
+                <div class="scp-formula">
+                    \[ \frac{dt}{d\tau} = -k \cdot \psi^{-1} \]
+                </div>
+                <p>где k - коэффициент временной инверсии (0.47 ± 0.12).</p>
+            </div>
             
-            <p style="
-    margin-left: 3%;
-    margin-right: 3%;
-">SCP-1531 проявляет следующие аномальные свойства:</p>
-            <ul>
-                <li><strong>Трупные точки (ψ=0):</strong> Сингулярности, где пространство прекращает существование</li>
-                <li><strong>Некросвязи:</strong> Пути между трупными точками с обратным течением времени</li>
-                <li><strong>Зоны распада (ψ &lt; 1):</strong> Области с нарушением классических геометрических аксиом</li>
-            </ul>
-            
-                       <div class="scp-image">
+            <div class="scp-block">
+                <h3>1.3 Зоны распада (ψ < 1)</h3>
+                <p>Области с нарушением классических геометрических аксиом:</p>
+                <ul>
+                    <li>Сумма углов треугольника ≠ π</li>
+                    <li>Параллельные прямые пересекаются</li>
+                    <li>Расстояние между точками несимметрично</li>
+                </ul>
+            </div>
+            <div class="scp-image">
                 <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="200" cy="200" r="180" fill="none" stroke="#3d93a9" stroke-width="2"/>
-                    <circle cx="200" cy="200" r="120" fill="none" stroke="#b82e2e" stroke-dasharray="5 5"/>
-                    <path d="M200 200 L220 180 M200 200 L180 220" stroke="#b82e2e" stroke-width="2"/>
-                    <text x="50" y="50" font-size="12" fill="#3d93a9" font-family="monospace"></text>
+                    <circle cx="200" cy="200" r="180" fill="none" stroke="#3d93a9" stroke-width="2">
+                        <animate attributeName="r" 
+                                 values="180;160;180" 
+                                 dur="8s" 
+                                 repeatCount="indefinite"/>
+                    </circle>
+                    <path d="M200 200 L220 180 M200 200 L180 220" stroke="#b82e2e" stroke-width="2">
+                        <animate attributeName="d" 
+                                 values="M200 200 L220 180 M200 200 L180 220;
+                                         M200 200 L230 170 M200 200 L170 230;
+                                         M200 200 L220 180 M200 200 L180 220"
+                                 dur="6s"
+                                 repeatCount="indefinite"/>
+                    </path>
+                    <text x="30" y="40" font-size="14" fill="#3d93a9" font-family="monospace">
+                        ∂ψ/∂t = -αψ
+                        <animate attributeName="opacity" 
+                                 values="1;0.5;1" 
+                                 dur="3s" 
+                                 repeatCount="indefinite"/>
+                    </text>
                     <polygon points="200,100 250,150 150,150" 
                              fill="none" 
                              stroke="#fff" 
                              stroke-width="1">
                         <animate attributeName="points" 
                                  values="200,100 250,150 150,150;
-                                         200,110 240,140 160,140" 
-                                 dur="2s" 
-                                 repeatCount="indefinite"/>
+                                         200,110 240,140 160,140;
+                                         200,100 250,150 150,150"
+                                 dur="5s" 
+                                 repeatCount="indefinite"
+                                 calcMode="spline"
+                                 keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
                     </polygon>
                 </svg>
-                <div class="scp-caption">Рисунок 2. Схематическое изображение зон распада SCP-1531 (Данные приблизительные)</div>
+                <div class="scp-caption">Рисунок 2. Циклические паттерны зон распада</div>
             </div>
-            
-            <h2>2. Математическое описание</h2>
+            <h2>2. История обнаружения</h2>
+            <p>SCP-1531 была обнаружена в ██/██/19██ при анализе рукописей математика-самоучки 
+              <span id="madScientistName" class="censored-name">█████ █████</span>, 
+              который исчез при попытке построить физическую модель своей теории. В его квартире были найдены чертежи, демонстрирующие пространственные аномалии, позже идентифицированные как трупные точки.</p>
+
+            <div id="madScientistModal" class="mad-modal">
+                <div class="mad-content">
+                    <div class="mad-paper">
+                        <div class="mad-text">
+                            <h2 style="color: #8b0000; border-bottom: 2px dashed #8b0000;">ЛИЧНЫЕ ЗАМЕТКИ</h2>
+                            <p style="font-family: 'Courier New', monospace; text-decoration: underline; color: #2b2b2b">ОНИ НЕ ХОТЯТ ЧТОБЫ ВЫ ЭТО ЗНАЛИ!!!</p>
+                            
+                            <div style="transform: rotate(-1deg); margin: 20px 0; padding: 15px; background: #fffff0; border: 1px solid #8b0000;">
+                                <h3 style="color: #8b0000; margin: 0;">ГЕОМЕТРИЯ МЕРТВЕЦОВ</h3>
+                                <p style="font-family: 'Bradley Hand', cursive; color: #2b2b2b">Пространство дышит... Оно ЖИВОЕ! Но мы убиваем его нашими измерениями...<br>
+                                ψ - это не параметр, это ПУЛЬС КОСМОСА! Когда ψ → 0 - это агония...</p>
+                                
+                                <div style="border-left: 3px solid #8b0000; padding-left: 10px; margin: 15px 0;">
+                                    <p style="color: #2b2b2b">◉ Трупные точки - РАНЫ ПРОСТРАНСТВА<br>
+                                    ◉ Некросвязи - КРОВОТОК В ОБРАТНОМ НАПРАВЛЕНИИ<br>
+                                    ◉ Зоны распада - ГНИЕНИЕ МАТЕРИИ</p>
+                                </div>
+                                
+                                <div style="background: #fff8dc; padding: 10px; position: relative;">
+                                    <div style="position: absolute; right: 5px; top: 5px; font-size: 0.8em; color: #8b0000;">{СМЕРТЕЛЬНО}</div>
+                                    <p style="font-weight: bold; color: #2b2b2b">Доказательство Конца:</p>
+                                   <p style="color: #2b2b2b"> \[ \exists P_0 \in \Omega : \psi(P_0, t) \equiv 0 \Rightarrow \Omega \to \varnothing \]</p>
+                                    <p style="font-size: 0.9em; color: #8b0000;">*эксперименты с живыми субъектами запрещены*</p>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: center; margin-top: 20px; font-family: 'Courier New', monospace;">
+                                <p style="margin: 0; color: #2b2b2b">▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮</p>
+                                <p style="margin: 0; font-size: 0.8em; color: #2b2b2b">УНИЧТОЖЬТЕ ЭТОТ ДОКУМЕНТ ПОСЛЕ ПРОЧТЕНИЯ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>3. Математическое описание</h2>
             
             <div class="scp-block">
-                <h3>2.1 Принцип распада</h3>
+                <h3>3.1 Принцип распада</h3>
                 <p>Изменение жизненной силы ψ(P, t) точки P описывается уравнением:</p>
                 <div class="scp-formula">
                     \[ \frac{\partial \psi}{\partial t} = -\alpha \psi - \beta \int_{\Omega} \frac{\psi(Q) \, dQ}{|P-Q|^{\gamma}} \]
@@ -431,15 +526,18 @@ h2::after {
             </div>
             
             <div class="scp-block">
-                <h3>2.2 Метрика пространства SCP-1531</h3>
+                <h3>3.2 Метрика пространства SCP-1531</h3>
                 <p>Расстояние между точками P и Q:</p>
+                <div class="scp-formula">
+                    \[ d(P, Q) = \inf_{\Gamma} \int_{\Gamma} \frac{\sqrt{dx_i dx^i}}{\psi(x, t) + \epsilon} \]
+                </div>
                 <p>При ψ → 0 расстояние стремится к бесконечности, создавая пространственные разрывы.</p>
             </div>
             
-            <h2>3. Аномальные эффекты</h2>
+            <h2>4. Аномальные эффекты</h2>
             
             <div class="scp-block">
-                <h3>3.1 Временные аномалии</h3>
+                <h3>4.1 Временные аномалии</h3>
                 <p>В некросвязях время течет в обратном направлении:</p>
                 <div class="scp-formula">
                     \[ t(\tau) = t_0 - \tau \cdot \ln(\psi_{\text{avg}}) \]
@@ -448,7 +546,7 @@ h2::after {
             </div>
             
             <div class="scp-block">
-                <h3>3.2 Геометрические аномалии</h3>
+                <h3>4.2 Геометрические аномалии</h3>
                 <p>Сумма углов в треугольнике:</p>
                 <div class="scp-formula">
                     \[ \angle A + \angle B + \angle C = \pi \cdot \left( 1 - \frac{\sum_{i=1}^3 \psi_i}{\psi_A + \psi_B + \psi_C} \right) \]
@@ -460,22 +558,13 @@ h2::after {
                 <p><strong>ВАЖНО:</strong> Контакт с зонами распада SCP-1531 приводит к необратимым изменениям в структуре материи. Всего зарегистрировано ██ случаев "геометрической смерти" среди исследователей.</p>
             </div>
             
-            <h2>4. История обнаружения</h2>
-            <p style="
-    margin-left: 3%;
-    margin-right: 3%;
-">SCP-1531 была обнаружена в ██/██/19██ при анализе рукописей математика-самоучки █████ █████, который исчез при попытке построить физическую модель своей теории. В его квартире были найдены чертежи, демонстрирующие пространственные аномалии, позже идентифицированные как трупные точки.</p>
-            
             <div class="scp-image">
                 <img src="https://via.placeholder.com/400x300/ffffff/b82e2e?text=Original+SCP-1531+Notes" alt="Оригинальные записи SCP-1531">
                 <div class="scp-caption">Рисунок 3. Одна из сохранившихся страниц оригинальных записей (Перевод с немецкого)</div>
             </div>
             
             <h2>5. Применение и исследования</h2>
-            <p style="
-    margin-left: 3%;
-    margin-right: 3%;
-">Исследования SCP-1531 проводятся под кодовым названием "Проект Некросфера". Основные направления:</p>
+            <p>Исследования SCP-1531 проводятся под кодовым названием "Проект Некросфера". Основные направления:</p>
             <ul>
                 <li>Разработка защитных мер против пространственного распада</li>
                 <li>Изучение возможности использования некросвязей для временных манипуляций</li>
@@ -487,17 +576,12 @@ h2::after {
             </div>
             
             <div class="scp-footer">
-                <p style="
-    margin-left: 3%;
-    margin-right: 3%;"><em>"Пространство не просто искривляется - оно умирает. И мы только что обнаружили его труп."</em><br>
+                <p><em>"Пространство не просто искривляется - оно умирает. И мы только что обнаружили его труп."</em><br>
                 - Д-р ██████, ведущий исследователь SCP-1531</p>
             </div>
             
             <div class="scp-credits">
-                <p style="
-    margin-left: 3%;
-    margin-right: 3%;
-">Документ подготовлен: Д-р ██████<br>
+                <p>Документ подготовлен: Д-р ██████<br>
                 Одобрено: Советом О5-█<br>
                 Последнее обновление: ██/██/20██</p>
                 <p>
@@ -512,29 +596,59 @@ h2::after {
     </div>
 
     <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            body.classList.add(savedTheme);
-            updateToggleText();
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-theme');
-            body.classList.toggle('light-theme');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Переключение темы
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
             
-            const currentTheme = body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
-            localStorage.setItem('theme', currentTheme);
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.classList.add(savedTheme);
+                updateToggleText();
+            }
             
-            updateToggleText();
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                body.classList.toggle('light-theme');
+                
+                const currentTheme = body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
+                localStorage.setItem('theme', currentTheme);
+                
+                updateToggleText();
+            });
+            
+            function updateToggleText() {
+                themeToggle.textContent = body.classList.contains('dark-theme') 
+                    ? '☀️ Светлая тема' 
+                    : '🌙 Тёмная тема';
+            }
+
+            // Модальное окно
+            const scientistName = document.getElementById('madScientistName');
+            
+            if(scientistName) {
+                scientistName.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showMadNotes();
+                });
+            }
+
+            document.getElementById('madScientistModal').addEventListener('click', function(e) {
+                if(e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
         });
-        
-        function updateToggleText() {
-            themeToggle.textContent = body.classList.contains('dark-theme') 
-                ? '☀️ Светлая тема' 
-                : '🌙 Тёмная тема';
+
+        function showMadNotes() {
+            const modal = document.getElementById('madScientistModal');
+            modal.style.display = 'flex';
+            
+            if(navigator.vibrate) navigator.vibrate(50);
+            
+            if(typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+            }
         }
     </script>
 </body>
