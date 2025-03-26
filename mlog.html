@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Участок 47 - Медицинские логи</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #3a3a3a;
+            padding: 20px;
+            border: 1px solid #4a4a4a;
+            box-shadow: 0 0 15px rgba(54, 162, 176, 0.2);
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #36a2b0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #36a2b0;
+            word-wrap: break-word;
+        }
+
+        .access-level {
+            background-color: #2a4a4f;
+            color: #a0e0e6;
+            padding: 5px 10px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border: 1px solid #36a2b0;
+            box-sizing: border-box;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            border-bottom: 1px dashed #4a4a4a;
+            padding-bottom: 15px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid #4a4a4a;
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #2a4a4f;
+            color: #a0e0e6;
+        }
+
+        .checkbox-group {
+            margin: 10px 0;
+            overflow: hidden;
+        }
+.checkbox-item {
+    margin: 5px 0;
+    display: block; /* Возвращаем блочное отображение */
+    clear: both;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 16px !important; /* Фиксированный размер */
+    height: 16px !important;
+    margin: 0 8px 0 0 !important;
+    vertical-align: middle; /* Выравнивание по тексту */
+    position: relative;
+    top: -1px;
+}
+
+.checkbox-item label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+        .signature {
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .footer {
+            font-size: 0.8em;
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            overflow: hidden;
+        }
+
+        .redacted {
+            background-color: #1a1a1a;
+            color: #1a1a1a;
+            padding: 0 5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #36a2b0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #3a3a3a;
+            margin-right: 5px;
+            border: 1px solid #36a2b0;
+            border-bottom: none;
+            color: #e0e0e0;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background-color: #2a4a4f;
+        }
+
+        .tab.active {
+            background-color: #36a2b0;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+
+        .log-content {
+            display: none;
+            overflow: hidden;
+        }
+
+        .log-content.active {
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #4a4a4a;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        input,
+        select {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #4a4a4a;
+            padding: 5px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        button {
+            background-color: #36a2b0;
+            color: #1a1a1a;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background-color: #2a8b99;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            text-align: right;
+            overflow: hidden;
+        }
+
+        .save-btn {
+            background-color: #36b06a;
+        }
+
+        .save-btn:hover {
+            background-color: #2a9959;
+        }
+
+        .load-btn {
+            background-color: #b07636;
+        }
+
+        .load-btn:hover {
+            background-color: #995e2a;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #b07636;
+            color: #1a1a1a;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .file-label:hover {
+            background-color: #995e2a;
+        }
+
+        .json-viewer {
+            background-color: #2a2a2a;
+            border: 1px solid #4a4a4a;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .encryption-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2a4a4f;
+            border: 1px solid #36a2b0;
+            overflow: hidden;
+        }
+
+        .secret-key {
+            width: 100%;
+            padding: 8px;
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #4a4a4a;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .delete-row {
+            background-color: #b03636;
+            color: white;
+            border: none;
+            padding: 2px 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .delete-row:hover {
+            background-color: #992a2a;
+        }
+
+        .table-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+    <div class="access-level">УРОВЕНЬ ДОСТУПА: M-1</div>
+    <button id="theme-toggle" style="position: absolute; top: 20px; right: 20px;">Смена темы</button>
+    <h1>УЧАСТОК 47 - СЕКТОР "АПОЛЛОН"</h1>
+    <h2>СИСТЕМА ВЕДЕНИЯ МЕДИЦИНСКИХ ЛОГОВ</h2>
+</div>
+
+<!-- Обновите стили -->
+<style>
+    :root {
+        --primary-color: #36a2b0;
+        --secondary-color: #3a3a3a;
+        --bg-color: #2a2a2a;
+        --text-color: #e0e0e0;
+        --font-family: 'Courier New', monospace;
+		--border-color: #36a2b0;
+        --access-bg: #2a4a4f;
+    }
+
+    .light-theme {
+        --primary-color: #c0392b;
+        --secondary-color: #f8f4e6;
+        --bg-color: #fffdfa;
+        --text-color: #2a2a2a;
+        --font-family: 'Roboto', sans-serif;        
+		--border-color: #c0392b;
+        --access-bg: #f2ebea;
+    }
+	.nav-tabs {
+		display: flex;
+		margin-bottom: 20px;
+		border-bottom: 1px solid var(--border-color);
+		flex-wrap: wrap;
+	}
+	th {
+		color: var(--access-bg);
+	}
+    /* Хеддер и линия */
+    .header {
+        border-bottom-color: var(--primary-color);
+    }
+
+    /* Секция шифрования */
+    .encryption-section {
+        background-color: var(--access-bg);
+        border-color: var(--primary-color);
+    }
+
+    /* JSON viewer */
+    .json-viewer {
+        background-color: var(--secondary-color);
+        border-color: var(--primary-color);
+        color: var(--text-color);
+    }
+
+    /* Вкладки */
+    .tab {
+        border-color: var(--primary-color);
+    }
+    
+    .tab.active {
+        background-color: var(--primary-color);
+        color: var(--bg-color);
+    }
+
+    /* Уровень доступа */
+    .access-level {
+        background-color: var(--access-bg);
+        border-color: var(--primary-color);
+        color: #a0e0e6;
+    }
+
+    .light-theme .access-level {
+        color: #ffd3d3;
+    }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+
+    .container {
+        background-color: var(--secondary-color);
+        border-color: var(--primary-color);
+    }
+
+    h1, h2, h3 {
+        color: var(--primary-color);
+    }
+
+    .access-level {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    th {
+        background-color: var(--primary-color);
+    }
+
+    button {
+        background-color: var(--primary-color);
+    }
+
+    /* Обновите все остальные элементы, использующие цвета */
+    input, select, textarea {
+        background-color: var(--secondary-color);
+        border-color: var(--primary-color);
+        color: var(--text-color);
+    }
+</style>
+
+        <div class="nav-tabs">
+            <div class="tab active" onclick="switchTab('log1')">47-MedLog-1</div>
+            <div class="tab" onclick="switchTab('log2')">47-MedLog-2</div>
+            <div class="tab" onclick="switchTab('log3')">47-MedLog-3</div>
+            <div class="tab" onclick="switchTab('log4')">47-MedLog-4</div>
+            <div class="tab" onclick="switchTab('load')">Выгрузить документ</div>
+        </div>
+
+        <!-- Форма 47-MedLog-1 -->
+        <div id="log1" class="log-content active">
+            <h2>ФОРМА 47-MedLog-1<br>"ЕЖЕДНЕВНЫЙ МЕДИЦИНСКИЙ ОТЧЕТ"</h2>
+
+            <div class="form-section">
+                <h3>1. ОБЩАЯ ИНФОРМАЦИЯ</h3>
+                <p><strong>Дата отчетного периода:</strong> <input type="text" id="log1-date1" placeholder="дд/мм/гггг"> - <input type="text" id="log1-date2" placeholder="дд/мм/гггг"></p>
+                <p><strong>Ответственный за отчет:</strong> <input type="text" id="log1-responsible" placeholder="ФИО ответственного"></p>
+            </div>
+
+            <div class="form-section">
+                <h3>2. СВОДНАЯ ТАБЛИЦА ПАЦИЕНТОВ</h3>
+                <table id="log1-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 3%">№</th>
+                            <th style="width: 14%">ФИО</th>
+                            <th style="width: 15%">ID</th>
+                            <th style="width: 24%">Диагноз</th>
+                            <th style="width: 12%">Состояние</th>
+                            <th style="width: 30%">Примечания</th>
+                            <th style="width: 3%">x</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><input type="text" class="patient-name" placeholder="ФИО пациента"></td>
+                            <td>RU-47-<input type="text" class="patient-id" placeholder="XXXX" style="width: 50px;"></td>
+                            <td><input type="text" class="patient-diagnosis" placeholder="Диагноз"></td>
+                            <td>
+                                <select class="patient-status">
+                                    <option value="" selected disabled style="text-color: #333333;">Статус</option>
+                                    <option>Удовл.</option>
+                                    <option>Сред.</option>
+                                    <option>Тяж.</option>
+                                    <option>Крит.</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="patient-notes" placeholder="Примечания"></td>
+							<td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button onclick="addRow('log1-table', ['patient-name', 'patient-id', 'patient-diagnosis', 'patient-status', 'patient-notes'])">+ Добавить строку</button>
+            </div>
+
+            <div class="form-section">
+                <h3>3. ОБЩИЕ СВЕДЕНИЯ</h3>
+                <p><strong>Количество пациентов за период:</strong> <input type="text" id="log1-patients-count" placeholder="0" style="width: 30px;"></p>
+                <p><strong>Количество госпитализаций:</strong> <input type="text" id="log1-hospitalizations" placeholder="0" style="width: 30px;"></p>
+                <p><strong>Примечания:</strong></p>
+                <textarea id="log1-notes" rows="3" placeholder="Дополнительные сведения"></textarea>
+            </div>
+
+            <div class="signature">
+                <p><strong>Главный врач:</strong> _________________________ (подпись)</p>
+                <p><strong>Дата составления:</strong> <input type="text" id="log1-completion-date" placeholder="дд/мм/гггг"></p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="save-btn" onclick="saveForm('log1')">Сохранить документ</button>
+                <button onclick="clearForm('log1')">Очистить форму</button>
+            </div>
+
+            <div class="footer">
+                <p>Документ подлежит хранению в архиве сектора "Аполлон" в течение 3 лет</p>
+                <p>Конфиденциальная информация - доступ ограничен</p>
+            </div>
+        </div>
+
+        <!-- Форма 47-MedLog-2 -->
+        <div id="log2" class="log-content">
+            <h2>ФОРМА 47-MedLog-2<br>"ЖУРНАЛ ОСОБЫХ СЛУЧАЕВ"</h2>
+
+            <div class="form-section">
+                <h3>1. ОСНОВНАЯ ИНФОРМАЦИЯ</h3>
+                <p><strong>Дата:</strong> <input type="text" id="log2-date" placeholder="дд/мм/гггг"></p>
+                <p><strong>Время:</strong> <input type="text" id="log2-time" placeholder="чч:мм"></p>
+                <p><strong>ФИО пациента:</strong> <input type="text" id="log2-patient-name" placeholder="ФИО пациента"></p>
+                <p><strong>ID сотрудника:</strong> RU-47-<input type="text" id="log2-patient-id" placeholder="XXXX" style="width: 50px;"></td>
+                <p><strong>Подразделение:</strong> <input type="text" id="log2-department" placeholder="Подразделение"></p>
+            </div>
+
+            <div class="form-section">
+                <h3>2. ОБНАРУЖЕННЫЕ СИМПТОМЫ</h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item"><input type="checkbox" id="log2-symptom1"> Необычные кожные образования</div>
+                    <div class="checkbox-item"><input type="checkbox" id="log2-symptom2"> Нарушения координации движений</div>
+                    <div class="checkbox-item"><input type="checkbox" id="log2-symptom3"> Неадекватные поведенческие реакции</div>
+                    <div class="checkbox-item"><input type="checkbox" id="log2-symptom4"> Аномальные показатели анализов</div>
+                    <div class="checkbox-item"><input type="checkbox" id="log2-symptom5"> Другие (указать): <input type="text" id="log2-symptom-other" style="width: 200px;"></div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>3. ПРИНЯТЫЕ МЕРЫ</h3>
+                <p><strong>Время изоляции:</strong> <input type="text" id="log2-isolation-time" placeholder="чч:мм"></p>
+                <p><strong>Номер карантинного бокса:</strong> <input type="text" id="log2-box-number" placeholder="Номер" style="width: 40px;"></p>
+                <p><strong>Уведомление СБ отправлено в:</strong> <input type="text" id="log2-sb-notification-time" placeholder="чч:мм"> через канал №<input type="text" id="log2-channel" placeholder="0" style="width: 20px;"></p>
+            </div>
+
+            <div class="form-section">
+                <h3>4. ЗАКЛЮЧЕНИЕ</h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item"><input type="checkbox" id="log2-conclusion1"> Требуется дополнительное обследование</div>
+                    <div class="checkbox-item"><input type="checkbox" id="log2-conclusion2"> Передача специалистам СБ</div>
+                    <div class="checkbox-item"><input type="checkbox" id="log2-conclusion3"> Возврат к стандартному лечению</div>
+                </div>
+                <p><strong>Комментарии:</strong></p>
+                <textarea id="log2-comments" rows="3" placeholder="Дополнительные комментарии"></textarea>
+            </div>
+
+            <div class="signature">
+                <p><strong>Ответственный врач:</strong> _________________________ (подпись)</p>
+                <p><strong>Дата заполнения:</strong> <input type="text" id="log2-completion-date" placeholder="дд/мм/гггг"></p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="save-btn" onclick="saveForm('log2')">Сохранить документ</button>
+                <button onclick="clearForm('log2')">Очистить форму</button>
+            </div>
+
+            <div class="footer">
+                <p>Документ подлежит хранению в сейфе №3 сектора "Аполлон" в течение 5 лет</p>
+                <p>Несанкционированный доступ преследуется по Кодексу внутренней безопасности Фонда</p>
+                <p>[Secure. Contain. Protect.]</p>
+            </div>
+        </div>
+
+        <!-- Форма 47-MedLog-3 -->
+        <div id="log3" class="log-content">
+            <h2>ФОРМА 47-MedLog-3<br>"УЧЕТ СПЕЦИАЛЬНЫХ ПРЕПАРАТОВ"</h2>
+
+            <div class="form-section">
+                <h3>1. ОСНОВНАЯ ИНФОРМАЦИЯ</h3>
+                <p><strong>Дата учета:</strong> <input type="text" id="log3-date" placeholder="дд/мм/гггг"></p>
+                <p><strong>Ответственный за учет:</strong> <input type="text" id="log3-responsible" placeholder="ФИО ответственного"></p>
+            </div>
+
+            <div class="form-section">
+                <h3>2. УЧЕТ ПРЕПАРАТОВ</h3>
+                <div class="table-wrapper">
+                    <table id="log3-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">№</th>
+                                <th style="width: 20%">Препарат</th>
+                                <th style="width: 15%">Серия</th>
+                                <th style="width: 18%">Количество</th>
+                                <th style="width: 20%">ФИО пациента</th>
+                                <th style="width: 15%">Основание</th>
+                                <th style="width: 12%">Дата</th>
+                                <th style="width: 5%">x</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><input type="text" class="drug-name" placeholder="Название"></td>
+                                <td><input type="text" class="drug-series" placeholder="Серия"></td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <input type="text" class="drug-amount" placeholder="0" style="width: 60%;">
+                                        <select class="drug-unit" style="width: 40%;">
+                                            <option value="мг">мг</option>
+                                            <option value="мл">мл</option>
+                                            <option value="доза">доза</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td><input type="text" class="drug-patient" placeholder="ФИО"></td>
+                                <td><input type="text" class="drug-basis" placeholder="Основание"></td>
+                                <td><input type="text" class="drug-date" placeholder="дд/мм/гггг"></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-actions">
+                    <button onclick="addDrugRow()">+ Добавить строку</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>3. ПОДТВЕРЖДЕНИЕ</h3>
+                    <p><strong>Ответственный фармацевт:</strong> _________________________ (подпись)</p>
+                    <p><strong>Утвердил:</strong> _________________________ (подпись Комитета по этике)</p>
+                    <p><strong>Дата проверки:</strong> <input type="text" id="log3-check-date" placeholder="дд/мм/гггг"></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="save-btn" onclick="saveForm('log3')">Сохранить документ</button>
+                    <button onclick="clearForm('log3')">Очистить форму</button>
+                </div>
+
+                <div class="footer">
+                    <p>Документ подлежит хранению в сейфе №1 сектора "Аполлон" в течение 10 лет</p>
+                    <p>Несанкционированный доступ карается применением амнезиаков класса A</p>
+                    <p>[Secure. Contain. Protect.]</p>
+                </div>
+            </div>
+			</div>
+
+            <!-- Форма 47-MedLog-4 -->
+            <div id="log4" class="log-content">
+                <h2>ФОРМА 47-MedLog-4<br>"ОТЧЕТ ОБ ИНЦИДЕНТАХ"</h2>
+
+                <div class="form-section">
+                    <h3>1. ОСНОВНАЯ ИНФОРМАЦИЯ</h3>
+                    <p><strong>Дата инцидента:</strong> <input type="text" id="log4-date" placeholder="дд/мм/гггг"></p>
+                    <p><strong>Время инцидента:</strong> <input type="text" id="log4-time" placeholder="чч:мм"></p>
+                    <p><strong>Место инцидента:</strong> <input type="text" id="log4-location" placeholder="Место инцидента"></p>
+                    <p><strong>Код инцидента:</strong> <input type="text" id="log4-code" placeholder="47-XXX"></p>
+                </div>
+
+                <div class="form-section">
+                    <h3>2. ОПИСАНИЕ ИНЦИДЕНТА</h3>
+                    <p><strong>Тип инцидента:</strong></p>
+                    <select id="log4-type">
+                        <option value="" selected disabled>Выберите тип</option>
+                        <option>Биологическая угроза</option>
+                        <option>Нарушение карантина</option>
+                        <option>Утечка препаратов</option>
+                        <option>Несанкционированный доступ</option>
+                        <option>Другое (указать)</option>
+                    </select>
+                    <p><strong>Подробное описание:</strong></p>
+                    <textarea id="log4-description" rows="5" placeholder="Подробное описание инцидента"></textarea>
+                    <p><strong>Задействованные сотрудники:</strong></p>
+                    <textarea id="log4-personnel" rows="3" placeholder="Список сотрудников"></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3>3. ПОСЛЕДСТВИЯ</h3>
+                    <p><strong>Пострадавшие:</strong> <input type="text" id="log4-casualties" placeholder="0" style="width: 30px;"></p>
+                    <p><strong>Примененные меры:</strong></p>
+                    <textarea id="log4-actions" rows="3" placeholder="Принятые меры"></textarea>
+                    <p><strong>Рекомендации:</strong></p>
+                    <textarea id="log4-recommendations" rows="3" placeholder="Рекомендации"></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3>4. ЗАКЛЮЧЕНИЕ</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="log4-conclusion1"> Инцидент исчерпан</div>
+                        <div class="checkbox-item"><input type="checkbox" id="log4-conclusion2"> Требуется дополнительное расследование</div>
+                        <div class="checkbox-item"><input type="checkbox" id="log4-conclusion3"> Передано в СБ</div>
+                        <div class="checkbox-item"><input type="checkbox" id="log4-conclusion4"> Внесены изменения в протоколы</div>
+                    </div>
+                </div>
+
+                <div class="signature">
+                    <p><strong>Составитель отчета:</strong> _________________________ (подпись)</p>
+                    <p><strong>Глава медицинской службы:</strong> _________________________ (подпись)</p>
+                    <p><strong>Представитель СБ:</strong> _________________________ (подпись)</p>
+                    <p><strong>Дата составления:</strong> <input type="text" id="log4-completion-date" placeholder="дд/мм/гггг"></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="save-btn" onclick="saveForm('log4')">Сохранить документ</button>
+                    <button onclick="clearForm('log4')">Очистить форму</button>
+                </div>
+
+                <div class="footer">
+                    <p>Документ подлежит хранению в архиве безопасности в течение 15 лет</p>
+                    <p>Несанкционированный доступ карается в соответствии с Кодексом внутренней безопасности</p>
+                    <p>[Secure. Contain. Protect.]</p>
+                </div>
+            </div>
+
+            <!-- Вкладка выгрузки документа -->
+            <div id="load" class="log-content">
+                <h2>ВЫГРУЗКА ДОКУМЕНТА</h2>
+
+                <div class="form-section">
+                    <h3>1. ЗАГРУЗКА ФАЙЛА</h3>
+                    <p>Выберите сохранённый файл (.scp) для восстановления данных:</p>
+
+                    <input type="file" id="file-input" class="file-input" accept=".scp">
+                    <label for="file-input" class="file-label">Выбрать файл</label>
+                    <button class="load-btn" onclick="loadData()">Загрузить данные</button>
+
+                    <p id="file-info" style="margin-top: 10px;">Файл не выбран</p>
+                </div>
+
+                <div class="encryption-section">
+                    <h3>СЕКРЕТНЫЙ КЛЮЧ</h3>
+                    <p>Для расшифровки введите секретный ключ:</p>
+                    <input type="password" id="secret-key" class="secret-key" placeholder="Введите секретный ключ">
+                    <button onclick="decryptData()">Расшифровать</button>
+                    <p id="decryption-status" style="margin-top: 10px;">Ожидание ключа...</p>
+                </div>
+
+                <div class="form-section">
+                    <h3>2. ПРОСМОТР ДАННЫХ</h3>
+                    <p>Содержимое загруженного файла:</p>
+                    <div id="json-viewer" class="json-viewer">
+                        Данные не загружены
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>3. ВОССТАНОВЛЕНИЕ</h3>
+                    <p>После проверки данных нажмите кнопку для восстановления в соответствующей форме:</p>
+                    <button onclick="applyData()" id="apply-btn" disabled>Восстановить данные</button>
+                    <p id="form-type-info" style="margin-top: 10px;">Тип формы не определён</p>
+                </div>
+
+                <div class="footer">
+                    <p>Внимание! Восстановление данных перезапишет текущее содержимое выбранной формы</p>
+                    <p>[Secure. Contain. Protect.]</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('light-theme');
+        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
+            // Глобальные переменные для загрузки данных
+            let currentFile = null;
+            let fileData = null;
+            let formType = null;
+            let encryptedData = null;
+
+            // Секретный ключ по умолчанию (должен быть одинаковым для шифрования/дешифрования)
+            const DEFAULT_SECRET_KEY = "MedikAbsolyt";
+
+            // Шифрование данных
+            function encryptData(data, secretKey = DEFAULT_SECRET_KEY) {
+                try {
+                    const jsonStr = JSON.stringify(data);
+                    const encrypted = CryptoJS.AES.encrypt(jsonStr, secretKey).toString();
+                    return encrypted;
+                } catch (error) {
+                    console.error("Ошибка шифрования:", error);
+                    return null;
+                }
+            }
+
+            // Дешифровка данных
+            function decryptData() {
+                const secretKey = document.getElementById('secret-key').value || DEFAULT_SECRET_KEY;
+
+                if (!encryptedData) {
+                    document.getElementById('decryption-status').textContent = "Нет данных для расшифровки";
+                    return;
+                }
+
+                try {
+                    const decrypted = CryptoJS.AES.decrypt(encryptedData, secretKey);
+                    const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+
+                    if (!decryptedStr) {
+                        document.getElementById('decryption-status').textContent = "Ошибка: Неверный ключ или данные";
+                        return;
+                    }
+
+                    fileData = JSON.parse(decryptedStr);
+                    formType = detectFormType(fileData);
+
+                    document.getElementById('json-viewer').textContent = JSON.stringify(fileData, null, 2);
+                    document.getElementById('decryption-status').textContent = "Данные успешно расшифрованы";
+
+                    if (formType) {
+                        document.getElementById('form-type-info').textContent = `Тип формы: ${formType}`;
+                        document.getElementById('apply-btn').disabled = false;
+                    } else {
+                        document.getElementById('form-type-info').textContent = 'Неизвестный тип формы';
+                        document.getElementById('apply-btn').disabled = true;
+                    }
+                } catch (error) {
+                    document.getElementById('decryption-status').textContent = "Ошибка расшифровки: " + error.message;
+                    console.error("Ошибка дешифровки:", error);
+                }
+            }
+
+            // Определение типа формы по данным
+            function detectFormType(data) {
+                if (data.hasOwnProperty('log1-date1')) return 'log1';
+                if (data.hasOwnProperty('log2-date')) return 'log2';
+                if (data.hasOwnProperty('log3-date')) return 'log3';
+                if (data.hasOwnProperty('log4-date')) return 'log4';
+                return null;
+            }
+
+            // Загрузка данных
+            function loadData() {
+                if (!currentFile) {
+                    alert('Пожалуйста, сначала выберите файл');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    encryptedData = e.target.result;
+                    document.getElementById('decryption-status').textContent = "Файл загружен, требуется расшифровка";
+                    document.getElementById('json-viewer').textContent = "Данные зашифрованы. Введите ключ для расшифровки.";
+                };
+                reader.readAsText(currentFile);
+            }
+
+            // Применение данных к форме
+            function applyData() {
+                if (!fileData || !formType) {
+                    alert('Нет данных для восстановления');
+                    return;
+                }
+
+                if (confirm(`Вы уверены, что хотите восстановить данные в форме ${formType}? Текущие данные будут перезаписаны.`)) {
+                    // Очищаем целевую форму
+                    clearForm(formType);
+
+                    // Заполняем обычные поля
+                    const form = document.getElementById(formType);
+                    const inputs = form.querySelectorAll('input, textarea, select');
+
+                    inputs.forEach(input => {
+                        const key = input.id || input.className;
+                        if (fileData.hasOwnProperty(key)) {
+                            if (input.type === 'checkbox') {
+                                input.checked = fileData[key];
+                            } else {
+                                input.value = fileData[key];
+                            }
+                        }
+                    });
+
+                    // Заполняем таблицы
+                    for (let i = 1; i <= 2; i++) {
+                        const tableKey = `table${i}`;
+                        if (fileData[tableKey]) {
+                            const table = form.querySelector('table');
+                            if (table) {
+                                // Удаляем все строки кроме первой
+                                const tbody = table.querySelector('tbody');
+                                while (tbody.rows.length > 1) {
+                                    tbody.deleteRow(1);
+                                }
+
+                                // Заполняем первую строку
+                                if (fileData[tableKey][0]) {
+                                    const firstRow = tbody.rows[0];
+                                    const inputs = firstRow.querySelectorAll('input, select');
+
+                                    inputs.forEach(input => {
+                                        const key = input.className;
+                                        if (fileData[tableKey][0].hasOwnProperty(key)) {
+                                            if (input.type === 'checkbox') {
+                                                input.checked = fileData[tableKey][0][key];
+                                            } else {
+                                                input.value = fileData[tableKey][0][key];
+                                            }
+                                        }
+                                    });
+                                }
+
+                                // Добавляем остальные строки
+                                for (let j = 1; j < fileData[tableKey].length; j++) {
+                                    let rowData = fileData[tableKey][j];
+
+                                    if (formType === 'log1') {
+                                        addRow('log1-table', ['patient-name', 'patient-id', 'patient-diagnosis', 'patient-status', 'patient-notes']);
+                                    } else if (formType === 'log3') {
+                                        addRow('log3-table', ['drug-name', 'drug-series', 'drug-amount', 'drug-unit', 'drug-patient', 'drug-basis', 'drug-date']);
+                                    }
+
+                                    // Заполняем добавленную строку
+                                    const newRow = tbody.rows[tbody.rows.length - 1];
+                                    const inputs = newRow.querySelectorAll('input, select');
+
+                                    inputs.forEach(input => {
+                                        const key = input.className;
+                                        if (rowData.hasOwnProperty(key)) {
+                                            if (input.type === 'checkbox') {
+                                                input.checked = rowData[key];
+                                            } else {
+                                                input.value = rowData[key];
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    alert(`Данные успешно восстановлены в форме ${formType}`);
+                    switchTab(formType);
+                }
+            }
+
+            // Переключение между вкладками
+            function switchTab(tabId) {
+                document.querySelectorAll('.log-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                document.getElementById(tabId).classList.add('active');
+                event.currentTarget.classList.add('active');
+
+                // Если переключаемся на вкладку загрузки, сбрасываем состояние
+                if (tabId === 'load') {
+                    document.getElementById('file-info').textContent = 'Файл не выбран';
+                    document.getElementById('json-viewer').textContent = 'Данные не загружены';
+                    document.getElementById('apply-btn').disabled = true;
+                    document.getElementById('form-type-info').textContent = 'Тип формы не определён';
+                    document.getElementById('decryption-status').textContent = 'Ожидание ключа...';
+                    document.getElementById('secret-key').value = '';
+                    currentFile = null;
+                    fileData = null;
+                    formType = null;
+                    encryptedData = null;
+                }
+            }
+
+            // Добавление новой строки в таблицу
+            function addRow(tableId, inputClasses) {
+                const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                const rowCount = table.rows.length;
+
+                // Номер строки
+                const cell0 = newRow.insertCell(0);
+                cell0.textContent = rowCount;
+
+                // Остальные ячейки
+                for (let i = 0; i < inputClasses.length; i++) {
+                    const cell = newRow.insertCell(i + 1);
+
+                    if (inputClasses[i] === 'drug-unit') {
+                        cell.innerHTML = `
+                        <input type="text" class="drug-amount" placeholder="0" style="width: 30px;">
+                        <select class="drug-unit">
+                            <option value="мг">мг</option>
+                            <option value="мл">мл</option>
+                            <option value="доза">доза</option>
+                        </select>
+                    `;
+                    } else if (inputClasses[i] === 'patient-status') {
+                        cell.innerHTML = `
+                        <select class="patient-status">
+                            <option value="" selected disabled>Статус</option>
+                            <option>Удовл.</option>
+                            <option>Сред.</option>
+                            <option>Тяж.</option>
+                            <option>Крит.</option>
+                        </select>
+                    `;
+                    } else if (inputClasses[i] === 'drug-date' || inputClasses[i] === 'patient-id') {
+                        if (inputClasses[i] === 'patient-id') {
+                            cell.innerHTML = `RU-47-<input type="text" class="patient-id" placeholder="XXXX" style="width: 50px;">`;
+                        } else {
+                            cell.innerHTML = `<input type="text" class="${inputClasses[i]}" placeholder="дд/мм/гггг">`;
+                        }
+                    } else {
+                        cell.innerHTML = `<input type="text" class="${inputClasses[i]}" placeholder="Введите данные">`;
+                    }
+                }
+            }
+
+            // Сохранение формы с шифрованием
+            function saveForm(formId) {
+                const formData = {};
+                const form = document.getElementById(formId);
+
+                // Собираем все input, textarea и select
+                const inputs = form.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox') {
+                        formData[input.id] = input.checked;
+                    } else if (input.type === 'text' || input.tagName === 'TEXTAREA' || input.tagName === 'SELECT') {
+                        formData[input.id || input.className] = input.value;
+                    }
+                });
+
+                // Собираем данные таблиц
+                const tables = form.querySelectorAll('table');
+                tables.forEach((table, tableIndex) => {
+                    const rows = table.querySelectorAll('tbody tr');
+                    const tableData = [];
+
+                    rows.forEach(row => {
+                        const rowData = {};
+                        const inputs = row.querySelectorAll('input, select');
+
+                        inputs.forEach(input => {
+                            if (input.type === 'checkbox') {
+                                rowData[input.className] = input.checked;
+                            } else {
+                                rowData[input.className] = input.value;
+                            }
+                        });
+
+                        tableData.push(rowData);
+                    });
+
+                    formData[`table${tableIndex + 1}`] = tableData;
+                });
+
+                // Шифруем данные перед сохранением
+                const encrypted = encryptData(formData);
+
+                if (!encrypted) {
+                    alert("Ошибка при шифровании данных!");
+                    return;
+                }
+
+                // Создаем blob для скачивания
+                const blob = new Blob([encrypted], {
+                    type: 'text/plain'
+                });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${formId}_${new Date().toISOString().slice(0, 10)}.scp`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                alert(`Документ ${formId} сохранен в зашифрованном виде!`);
+            }
+
+            // Очистка формы
+            function clearForm(formId) {
+                if (confirm('Вы уверены, что хотите очистить эту форму? Все введенные данные будут потеряны.')) {
+                    const form = document.getElementById(formId);
+
+                    // Очищаем обычные поля
+                    const inputs = form.querySelectorAll('input, textarea, select');
+                    inputs.forEach(input => {
+                        if (input.type === 'checkbox') {
+                            input.checked = false;
+                        } else {
+                            input.value = '';
+                        }
+                    });
+
+                    // Очищаем таблицы (оставляем только первую строку)
+                    const tables = form.querySelectorAll('table');
+                    tables.forEach(table => {
+                        const tbody = table.querySelector('tbody');
+                        while (tbody.rows.length > 1) {
+                            tbody.deleteRow(1);
+                        }
+
+                        // Очищаем первую строку
+                        const firstRow = tbody.rows[0];
+                        const inputs = firstRow.querySelectorAll('input, select');
+                        inputs.forEach(input => {
+                            if (input.type === 'checkbox') {
+                                input.checked = false;
+                            } else {
+                                input.value = '';
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Обработчик выбора файла
+            document.getElementById('file-input').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    currentFile = file;
+                    document.getElementById('file-info').textContent = `Выбран файл: ${file.name}`;
+                    document.getElementById('decryption-status').textContent = "Файл загружен, требуется расшифровка";
+                    document.getElementById('json-viewer').textContent = "Данные зашифрованы. Введите ключ для расшифровки.";
+                    document.getElementById('apply-btn').disabled = true;
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        encryptedData = e.target.result;
+                    };
+                    reader.readAsText(file);
+                }
+            });
+			        // Добавление строки в таблицу препаратов
+        function addDrugRow() {
+            const table = document.getElementById('log3-table').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            const rowCount = table.rows.length;
+            
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td><input type="text" class="drug-name" placeholder="Название"></td>
+                <td><input type="text" class="drug-series" placeholder="Серия"></td>
+                <td>
+                    <div style="display: flex;">
+                        <input type="text" class="drug-amount" placeholder="0" style="width: 60%;">
+                        <select class="drug-unit" style="width: 40%;">
+                            <option value="мг">мг</option>
+                            <option value="мл">мл</option>
+                            <option value="доза">доза</option>
+                        </select>
+                    </div>
+                </td>
+                <td><input type="text" class="drug-patient" placeholder="ФИО"></td>
+                <td><input type="text" class="drug-basis" placeholder="Основание"></td>
+                <td><input type="text" class="drug-date" placeholder="дд/мм/гггг"></td>
+                <td><button class="delete-row" onclick="deleteRow(this)">×</button></td>
+            `;
+        }
+
+        // Удаление строки из таблицы
+        function deleteRow(btn) {
+            const row = btn.parentNode.parentNode;
+            const table = row.parentNode;
+            
+            if (table.rows.length > 1) {
+                row.remove();
+                // Обновляем номера строк
+                const rows = table.rows;
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].cells[0].textContent = i + 1;
+                }
+            } else {
+                alert("Нельзя удалить последнюю строку!");
+            }
+        }
+
+        // Обновленная функция addRow для других таблиц
+        function addRow(tableId, inputClasses) {
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            const rowCount = table.rows.length;
+            
+            // Номер строки
+            const cell0 = newRow.insertCell(0);
+            cell0.textContent = rowCount;
+            
+            // Остальные ячейки
+            for (let i = 0; i < inputClasses.length; i++) {
+                const cell = newRow.insertCell(i + 1);
+                
+                if (inputClasses[i] === 'drug-unit') {
+                    cell.innerHTML = `
+                        <div style="display: flex;">
+                            <input type="text" class="drug-amount" placeholder="0" style="width: 60%;">
+                            <select class="drug-unit" style="width: 40%;">
+                                <option value="мг">мг</option>
+                                <option value="мл">мл</option>
+                                <option value="доза">доза</option>
+                            </select>
+                        </div>
+                    `;
+                } else if (inputClasses[i] === 'patient-status') {
+                    cell.innerHTML = `
+                        <select class="patient-status">
+                            <option value="" selected disabled>Статус</option>
+                            <option>Удовл.</option>
+                            <option>Сред.</option>
+                            <option>Тяж.</option>
+                            <option>Крит.</option>
+                        </select>
+                    `;
+                } else if (inputClasses[i] === 'drug-date' || inputClasses[i] === 'patient-id') {
+                    if (inputClasses[i] === 'patient-id') {
+                        cell.innerHTML = `RU-47-<input type="text" class="patient-id" placeholder="XXXX" style="width: 50px;">`;
+                    } else {
+                        cell.innerHTML = `<input type="text" class="${inputClasses[i]}" placeholder="дд/мм/гггг">`;
+                    }
+                } else {
+                    cell.innerHTML = `<input type="text" class="${inputClasses[i]}" placeholder="Введите данные">`;
+                }
+            }
+            
+            // Добавляем кнопку удаления
+            const deleteCell = newRow.insertCell();
+            deleteCell.innerHTML = `<button class="delete-row" onclick="deleteRow(this)">×</button>`;
+        }
+		    if(localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-theme');
+    }
+</script>
+</body>
+
+</html>
